@@ -80,3 +80,34 @@ Visuotactile data can first be recorded independently on a common timeline. It i
 | Grasping conditions | Occlusion, weak texture, short reciprocating motion, pauses, rotation and motor vibration | Report failures and recovery as well as successful trajectories |
 
 Source code and paper results provide implementations to study and reuse. Product capability must be established on the actual hardware combination. An open main-library license does not automatically cover dependencies or hardware designs. Study public reference designs with unclear permissions, but verify file-level licenses before integration.
+
+## 5. Exposure and measurement time
+
+**Exposure duration** is the interval during which an image sensor accumulates light for an image, commonly expressed in µs or ms. It differs from PC image-arrival time and frame rate. A camera may report a configured or effective exposure duration; consult the model documentation. See [Basler Exposure Time](https://docs.baslerweb.com/exposure-time).
+
+**VIO does not universally require manual exposure.** Manual exposure generally means disabling exposure auto and selecting a duration; automatic exposure adjusts that duration using image brightness. Fixed exposure helps establish a repeatable baseline, followed by evaluation under the actual automatic-exposure conditions. Preserve actual per-frame exposure metadata and use the image measurement-time convention required by the estimator. Compatibility between auto exposure and trigger modes is model-specific. See [Exposure Auto](https://docs.baslerweb.com/exposure-auto) and [Exposure Mode](https://docs.baslerweb.com/exposure-mode).
+
+| Time quantity | Recording and interpretation |
+| --- | --- |
+| Exposure start/end | Prefer device metadata or exposure-feedback edges; identify the corresponding row or frame |
+| Effective image measurement time | For a global shutter, if the estimator expects exposure center, start plus half the actual duration is an approximation; do not apply it to every model |
+| Rolling-shutter readout | Rows have different measurement times; use the camera model, row-readout parameters or an explicit reference-row convention |
+| IMU time | Distinguish sampling, DRDY, FIFO timestamps and filtering delay |
+| PC receive time | Store separately to analyze queues, USB/network transport and processing latency |
+
+A hardware trigger requests acquisition, exposure feedback identifies actual events, and temporal calibration estimates the remaining effective measurement-time offset. Frame-ID association and missing-event detection remain necessary. Specify voltage levels, I/O direction, active edges, minimum pulse widths and connector pins when reserving interfaces; a generic synchronization GPIO label is insufficient.
+
+## 6. From open interfaces to product capability
+
+Acquiring fisheye, IMU and visuotactile data on the follower while estimating on a PC is a possible system partition. Its value depends on the complete data path and evaluation under target conditions. Handheld UMI demonstration capture and robot-mounted follower localization have different mounting, occlusion and motion conditions and should be evaluated separately.
+
+| Implemented and validated content | Corresponding product capability |
+| --- | --- |
+| Raw image/IMU APIs, units and timestamp semantics | Sensor interfaces usable by third-party algorithms |
+| Timing, calibration, PC-side VIO, quality states and reset notifications | An evaluable visual-inertial localization kit |
+| Joint visuotactile/pose recordings, calibration versions and replay | Multimodal capture for grasping and demonstrations |
+| Contact/slip models with validated fusion results | The corresponding visual-inertial-tactile fusion capability |
+
+Reusable calibration, reliable timing, interpretable tracking status, replayable data and contextualized error measurements can form product differentiators. Running on a PC does not reduce the value of those deliverables. Suitability for control feedback still depends on actual frequency, continuity and end-to-end latency.
+
+An SDK should at least specify source clocks/units, frame IDs and device sessions, exposure metadata, full poses and frames, sensor-to-TCP transform conventions, calibration versions, tracking quality, loss statistics and reinitialization events. Distinguish data access, algorithm integration and physical validation. Claims about competing products or market novelty require model-specific investigation of interfaces and actual SDK capabilities; this collection makes no market-exclusivity claim.

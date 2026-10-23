@@ -56,6 +56,8 @@ For capture SDKs, noise tools, other algorithms and source-available alternative
 
 Software and hardware timing solve different parts of the same acquisition problem.
 
+The diagram illustrates a sensor-integration reference workflow. Follow the upstream sources in the catalog for implementations of its individual stages.
+
 | Layer | Responsibility and examples |
 | --- | --- |
 | Hardware events | Trigger exposure or timestamp exposure/IMU events on the device<br>VersaVIS, STM32 and Teensy designs |
@@ -88,7 +90,7 @@ For a fisheye/IMU follower gripper, the [PC-side integration guide](docs/INTEGRA
 ## 6. Documentation
 
 - [Project catalog](docs/CATALOG.md): all 47 resources, their roles and integration/licensing limits.
-- [Follower-gripper integration](docs/INTEGRATION.md): software/hardware timing, signal interfaces, SDK metadata and evaluation.
+- [Follower-gripper integration](docs/INTEGRATION.md): software/hardware timing, interfaces, exposure/timestamps, PC-side responsibilities, product capabilities and evaluation.
 - [简体中文文档](README-zh.md): matching Chinese README and guides.
 
 ## 7. Maintenance and licensing
