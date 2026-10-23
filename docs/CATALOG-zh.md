@@ -4,6 +4,8 @@
 
 收录 47 项资源，资料整理日期：2026-10-23。条目区分 VIO、纯视觉 SLAM、同步工具和许可受限的源码方案；不按 star 数量推断性能或产品成熟度。
 
+<a id="vio"></a>
+
 ## 1. VIO 与视觉惯性 SLAM
 
 | 项目与源码 | 能解决什么 | 使用边界与集成说明 |
@@ -19,6 +21,8 @@
 | [DM-VIO](https://github.com/lukasvst/dm-vio) | 基于直接法和延迟边缘化的单目视觉惯性里程计。 | 适合作为算法路线对照；需要准确时序及图像模型，提供独立 ROS 包装仓库。GPLv3。 |
 | [AirSLAM](https://github.com/sair-lab/AirSLAM) | 学习式点线特征结合几何优化，支持视觉及视觉惯性模式、地图优化和重定位。 | 适合光照变化场景专项评估；官方环境包含 CUDA、TensorRT 和 ROS Noetic，Jetson 部署需额外工作。GPLv3。 |
 
+<a id="software-sync"></a>
+
 ## 2. 软件时间对齐与时钟处理
 
 软件方案可以独立用于原型，也可以与硬件同步配合。VINS-Mono 的在线时间标定、VINS-Fusion 的时空标定及 OpenVINS 的相机与 IMU 时间偏移估计，属于上一节算法内的能力；Kalibr 与 iKalibr 的离线标定见后文。下面补充可拆分复用的时钟和数据处理方案。
@@ -33,6 +37,8 @@
 | [chrony](https://chrony-project.org/) | NTP 及参考时钟支持，用于 PC 系统时钟同步和监控。 | 适合多主机记录及时间基准管理；不替代相机与 IMU 的采样事件时间标记。GPLv2。 |
 
 MAVLink 的 [TIMESYNC 协议说明](https://mavlink.io/en/services/timesync.html)给出了请求响应、往返时间及滤波过程。CuckooTimeTranslator 原文明确说明单向映射仍有未知偏置；它与利用运动观测估计相机和 IMU 时间偏移是互补关系。message_filters 的近似配对只是放宽已有时间戳的匹配窗口，不能把错误的采样时间变正确。
+
+<a id="hardware-sync"></a>
 
 ## 3. 硬件同步平台与参考工程
 
@@ -53,6 +59,8 @@ MAVLink 的 [TIMESYNC 协议说明](https://mavlink.io/en/services/timesync.html
 
 VersaVIS 的 [硬件与引脚资料](https://github.com/ethz-asl/versavis_hw)单独提供相机 Trigger、Exposure 和 IMU Data Ready 相关连接。LiDAR Sync Mimics GPS 的[原组织仓库](https://github.com/MobileRoboticsSkoltech/lidar-sync-mimics-gps)已归档，与作者仓库作为同一项目家族收录。
 
+<a id="drivers"></a>
+
 ## 4. 传感器驱动与采集 SDK
 
 | 项目与源码 | 能解决什么 | 使用边界与集成说明 |
@@ -66,6 +74,8 @@ VersaVIS 的 [硬件与引脚资料](https://github.com/ethz-asl/versavis_hw)单
 
 驱动是软件同步能否落地的关键。FLIR 驱动的[时间戳与 PTP 说明](https://github.com/ros-drivers/flir_camera_driver/blob/humble-devel/spinnaker_camera_driver/doc/index.rst)区分 SDK 交付时间、传感器时间戳及 PTP。libcamera 的[控制元数据定义](https://docs.libcamera.org/master/public-api/control__ids_8h.html)说明 SensorTimestamp 对应首行曝光时刻；具体平台仍须确认驱动实现。DepthAI 的[设备对时说明](https://docs.luxonis.com/software-v3/ai-inference/conversion/rvc-conversion/offline/)可用于参考设备到主机的持续时钟映射。
 
+<a id="calibration"></a>
+
 ## 5. 空间与时间标定
 
 | 项目与源码 | 能解决什么 | 使用边界与集成说明 |
@@ -78,6 +88,8 @@ VersaVIS 的 [硬件与引脚资料](https://github.com/ethz-asl/versavis_hw)单
 
 Kalibr 的[相机与 IMU 标定说明](https://github.com/ethz-asl/kalibr/wiki/camera-imu-calibration)要求同一时钟下的低抖动时间戳及充分运动激励。标定相机内参、相机与 IMU 外参之后，还要测量传感器到夹爪 TCP 的完整变换；CAD 安装位置不能直接代替实测标定。
 
+<a id="evaluation"></a>
+
 ## 6. 轨迹评估与可回放记录
 
 | 项目与源码 | 能解决什么 | 使用边界与集成说明 |
@@ -85,6 +97,8 @@ Kalibr 的[相机与 IMU 标定说明](https://github.com/ethz-asl/kalibr/wiki/c
 | [evo](https://github.com/MichaelGrupp/evo) | 里程计及 SLAM 的轨迹评估和绘图，支持 APE、RPE 等指标。 | 比较 VIO、机械臂 FK 与外部参考时统一坐标、时间及对齐方式；有米制尺度的 VIO 不应随意用尺度拟合掩盖误差。GPLv3。 |
 | [rosbag2](https://github.com/ros2/rosbag2) | ROS 2 话题记录与回放，可结合 MCAP 存储。 | 用于同一份原始数据反复比较算法；同时保留源时间、接收时间、序号和重置事件。Apache 2.0。 |
 | [MCAP](https://github.com/foxglove/mcap) | 面向机器人及发布订阅数据的容器格式，配套多语言读写库。 | 适合自有 SDK 的多模态数据落盘与离线分析；文件格式本身不会实现传感器同步。MIT。 |
+
+<a id="mapping"></a>
 
 ## 7. 多传感器和稠密建图扩展
 
@@ -98,6 +112,8 @@ Kalibr 的[相机与 IMU 标定说明](https://github.com/ethz-asl/kalibr/wiki/c
 | [VIGS SLAM](https://github.com/cvg/VIGS-SLAM) | RGB 加 IMU，轨迹估计与 3D Gaussian 地图重建结合。 | 属于视觉惯性稠密重建研究路线，GPU 及环境依赖较重。主项目 Apache 2.0，但部分第三方组件许可更严格。 |
 | [VGGT SLAM 2.0](https://github.com/MIT-SPARK/VGGT-SLAM) | 基础模型驱动的稠密视觉重建、回环及可选开放词汇物体检测。 | 原版不是 VIO；地图更新速率不能直接等同于控制所需位姿频率。主代码 BSD 2-Clause，模型和可选组件分别授权。 |
 | [MASt3R SLAM](https://github.com/rmurai0610/MASt3R-SLAM) | 基于三维重建先验的稠密视觉 SLAM。 | 源码可获取的研究参考，原版不直接融合 IMU；采用 CC BY-NC-SA 4.0，含非商业限制，单独标注。 |
+
+<a id="restricted-source"></a>
 
 ## 8. 平台受限的源码方案
 

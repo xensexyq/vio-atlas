@@ -4,6 +4,8 @@
 
 47 resources, reviewed on 2026-10-23. Entries distinguish VIO, visual-only SLAM, synchronization tools and source-available software with license restrictions. Stars do not establish performance or production readiness.
 
+<a id="vio"></a>
+
 ## 1. VIO and visual-inertial SLAM
 
 | Project and source | Purpose | Boundaries and integration |
@@ -19,6 +21,8 @@
 | [DM-VIO](https://github.com/lukasvst/dm-vio) | Direct monocular visual-inertial odometry with delayed marginalization. | An alternative algorithmic baseline. Requires sound timing and image models; a separate ROS wrapper is available. GPLv3. |
 | [AirSLAM](https://github.com/sair-lab/AirSLAM) | Learned point/line features with geometric optimization, visual/visual-inertial modes, map optimization and relocalization. | Evaluate specifically under lighting changes. The official environment includes CUDA, TensorRT and ROS Noetic; Jetson deployment needs additional work. GPLv3. |
 
+<a id="software-sync"></a>
+
 ## 2. Software time alignment and clock handling
 
 | Project and source | Purpose | Boundaries and integration |
@@ -33,6 +37,8 @@
 Software approaches can support prototypes independently or complement hardware synchronization. Online camera/IMU time-offset estimation is also part of OpenVINS, VINS-Mono and VINS-Fusion; offline calibration appears below.
 
 The official [MAVLink TIMESYNC protocol](https://mavlink.io/en/services/timesync.html) describes exchanges, round-trip-time handling and filtering. One-way CuckooTimeTranslator mapping still retains unknown bias and noise; it complements motion-based camera/IMU time-offset estimation. Approximate message_filters pairing only widens a timestamp-matching window and cannot correct wrong sampling times.
+
+<a id="hardware-sync"></a>
 
 ## 3. Hardware synchronization platforms and references
 
@@ -53,6 +59,8 @@ These projects cover full camera/IMU systems, exposure-feedback capture, STM32/T
 
 See the separate [VersaVIS hardware and pin documentation](https://github.com/ethz-asl/versavis_hw). The archived [original LiDAR Sync Mimics GPS repository](https://github.com/MobileRoboticsSkoltech/lidar-sync-mimics-gps) and the author repository are one project family.
 
+<a id="drivers"></a>
+
 ## 4. Sensor drivers and acquisition SDKs
 
 | Project and source | Purpose | Boundaries and integration |
@@ -66,6 +74,8 @@ See the separate [VersaVIS hardware and pin documentation](https://github.com/et
 
 The acquisition driver determines which timestamps are actually available. The [FLIR timestamp/PTP documentation](https://github.com/ros-drivers/flir_camera_driver/blob/humble-devel/spinnaker_camera_driver/doc/index.rst) distinguishes delivery time, device-time conversion and IEEE 1588 modes. [libcamera control metadata](https://docs.libcamera.org/master/public-api/control__ids_8h.html) defines SensorTimestamp at first-row exposure; verify the implementation on the target platform. The [DepthAI device synchronization documentation](https://docs.luxonis.com/software-v3/ai-inference/conversion/rvc-conversion/offline/) is a reference for continuous device-to-host clock mapping.
 
+<a id="calibration"></a>
+
 ## 5. Spatial and temporal calibration
 
 | Project and source | Purpose | Boundaries and integration |
@@ -78,6 +88,8 @@ The acquisition driver determines which timestamps are actually available. The [
 
 The [Kalibr camera/IMU calibration guide](https://github.com/ethz-asl/kalibr/wiki/camera-imu-calibration) calls for low-jitter timestamps on a common clock and sufficient excitation. Camera intrinsics, camera/IMU extrinsics, time offset and IMU noise remain separate calibration responsibilities. Also measure the complete sensor-to-gripper-TCP transform; a CAD mounting position does not replace measured calibration.
 
+<a id="evaluation"></a>
+
 ## 6. Trajectory evaluation and replayable recording
 
 | Project and source | Purpose | Boundaries and integration |
@@ -85,6 +97,8 @@ The [Kalibr camera/IMU calibration guide](https://github.com/ethz-asl/kalibr/wik
 | [evo](https://github.com/MichaelGrupp/evo) | Odometry/SLAM trajectory evaluation and plotting, including APE and RPE. | Unify frames, time and alignment when comparing VIO, robot FK and external references. Do not hide metric-VIO scale errors through arbitrary scale fitting. GPLv3. |
 | [rosbag2](https://github.com/ros2/rosbag2) | ROS 2 recording and replay, optionally with MCAP storage. | Reuse the same raw recording across algorithms. Preserve source/receive times, sequence numbers and reset events. Apache 2.0. |
 | [MCAP](https://github.com/foxglove/mcap) | Robotics/pub-sub data container format with multi-language readers and writers. | Useful for custom-SDK multimodal recording and offline analysis. A storage format does not synchronize sensors. MIT. |
+
+<a id="mapping"></a>
 
 ## 7. Multi-sensor and dense-mapping extensions
 
@@ -98,6 +112,8 @@ The [Kalibr camera/IMU calibration guide](https://github.com/ethz-asl/kalibr/wik
 | [MASt3R SLAM](https://github.com/rmurai0610/MASt3R-SLAM) | Dense visual SLAM based on 3D reconstruction priors. | Source-available research reference; the original does not directly fuse IMU data. CC BY-NC-SA 4.0 includes a noncommercial restriction and is identified separately. |
 
 These are extensions or comparison routes. Visual-only SLAM is not VIO. Dense mapping, open-vocabulary queries and loop closure do not establish continuous, high-rate, low-latency control feedback.
+
+<a id="restricted-source"></a>
 
 ## 8. Platform-restricted source-available software
 
