@@ -1,8 +1,10 @@
 <div align="center">
 
-# VIO Open Source Collection
+# VIO Atlas
 
-A curated guide to visual-inertial odometry, SLAM, software timing, hardware synchronization, calibration and evaluation.
+<a id="vio-open-source-collection"></a>
+
+Your field guide to visual-inertial odometry—from algorithms to synchronized sensors.
 
 [English](README.md) · [简体中文](README-zh.md)
 

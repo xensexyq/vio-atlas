@@ -1,8 +1,10 @@
 <div align="center">
 
-# VIO Open Source Collection
+# VIO Atlas
 
-视觉惯性里程计与相关项目合集，覆盖 SLAM、软件时间处理、硬件同步、标定与评估。
+<a id="vio-open-source-collection"></a>
+
+从算法到同步硬件的视觉惯性技术地图。
 
 [English](README.md) · [简体中文](README-zh.md)
 
